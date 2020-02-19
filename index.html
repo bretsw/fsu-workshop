@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>R U ready 4 R?</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Bret Staudt Willet, Joshua Rosenberg, &amp; Spencer Greenhalgh" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# R U ready 4 R?
+## Analyzing Educational Internet Data Using R
+### Bret Staudt Willet, Joshua Rosenberg, &amp; Spencer Greenhalgh
+### March 6, 2020
+
+---
+
+
+
+
+class: inverse, center, middle
+
+**Access our slide deck here:**  
+https://bretsw.github.io/fsu-workshop/
+
+**Follow us on Twitter:**  
+[@bretsw](https://twitter.com/bretsw)  
+[@jrosenberg6432](https://twitter.com/jrosenberg6432)  
+[@spgreenhalgh](https://twitter.com/spgreenhalgh)
+
+---
+
+# Who We Are
+
+* **Bret Staudt Willet**
+  * PhD Candidate, Ed Psych &amp; Ed Tech, Michigan State University
+  * *Primary area of interest:* teacher networks + social media
+* **Dr. Joshua Rosenberg**
+  * Assistant Professor, STEM Education, University of Tennessee, Knoxville
+  * *Primary area of interest:* data science in education + data science education
+* **Dr. Spencer Greenhalgh**
+  * Assistant Professor, Information Communication Technology, University of Kentucky
+  * *Primary area of interest:* implications of digital contexts for teaching, learning, and other meaningful practices
+
+&lt;img src="img/koehler-diaspora-circa-2017.jpg" width="300px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# How We Teach
+
+&lt;img src="img/tech_support_cheat_sheet.png" width="480px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Agenda
+
+1. Getting started
+  1. Why learn R?
+  1. Demo Doc Part 1: Processing data
+  1. Demo Doc Part 2: Visualizing data
+  1. Demo Doc Part 3: Modeling data 
+1. Chapter walkthrough: Considerations for using social media data in LD&amp;T research
+  1. Conducting ethical research
+  1. Framing the research
+  1. Organizing the research process
+  1. Collecting data
+  1. Analyzing data
+  1. Disseminating research
+1. Self-guided exploration
+  1. Option A: Text analysis
+  1. Option B: Social network analysis
+1. Learning and doing more with R (4:50)
+---
+
+class: inverse, center, middle
+
+# Getting started
+
+---
+
+# Why learn R?
+
+* It is capable of carrying out basic and complex statistical analyses
+* It is able to work with data small (*n* = 30!) and large (*n* = 100,000+) efficiently
+* It is a programming language and so is quite flexible
+* There is a great, inclusive community of users and developers (and teachers)
+* It is cross-platform, open-source, and freely-available
+
+---
+
+# Download the repository
+
+You can access all of the workshop materials at: https://github.com/bretsw/fsu-workshop/
+
+&lt;img src="img/download_repo_screenshot.png" width="720px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Installing R and RStudio
+
+To download R:
+- Visit this page to download R: https://cran.r-project.org/
+- Find your operating system (Mac, Windows, or Linux)
+- Download the 'latest release' on the page for your operating system and download and install the application
+
+To download RStudio:
+- Visit this page to download RStudio: https://www.rstudio.com/products/rstudio/download/
+- Find your operating system (Mac, Windows, or Linux)
+- Download the 'latest release' on the page for your operating system and download and install the application
+
+## Check that it worked
+
+Open RStudio. Find the console window and type in `2 + 2`. If what you can guess is returned (hint: it's what you expect!), then RStudio *and* R both work.
+
+---
+
+# Working with R projects
+
+Before proceeding, we're going to take a few steps to set ourselves to make the analysis easier; namely, through the use of Projects, an RStudio-specific organizational tool. 
+
+We already have a project set up. Navigate to the downloaded repo files and open `fsu-workshop-2019.Rproj`
+
+(To create a project in RStudio, you can navigate to "File" and then "New Directory". Then, click "New Project".)
+
+Names should be short and easy-to-remember but also informative.
+
+---
+
+# Looking at RStudio
+
+&lt;img src="img/RStudio.png" width="720px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Packages
+
+"Packages" are shareable collections of R code that provide functions (i.e., a command to perform a specific task), data, and documentation. Packages increase the functionality of R by improving and expanding on base R (basic R functions). 
+
+### Installing and Loading Packages
+
+To download a package, you must call `install.packages()`:
+
+
+```r
+install.packages("dplyr")
+```
+
+You can also navigate to the Packages pane, and then click "Install", which will work the same as the line of code above. This is a way to install a package using code or part of the RStudio interface. 
+
+Usually, writing code is a bit quicker, but using the interface can be very useful and complementary to use of code. 
+
+---
+
+# Using packages
+
+*After* the package is installed, it must be loaded into your RStudio session using `library()`:
+
+
+```r
+library(dplyr)
+```
+
+We only have to install a package once, but to use it, we have to load it each time we start a new R session.
+
+&gt; A package is a like a book, a library is like a library; you use library() to check a package out of the library
+&gt; (Hadley Wickham, Chief Scientist, RStudio)
+
+In this case, [dplyr](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8) is a package providing "a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges."
+
+--- 
+
+# Configuring RStudio
+
+By default, RStudio saves all of the objects in your environment. In general, this is not ideal, because it means that you may have taken steps interactively that are not documented your code.
+
+&lt;img src="img/save-workspace-reminder.jpg" width="425px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The tidyverse
+
+The **tidyverse** is a set of packages for data manipulation, exploration, and visualization using the design philosophy of 'tidy' data. Tidy data has a specific structure: each variable is a column, each observation is a row, and each type of observational unit is a table.
+
+The packages contained in the tidyverse provide useful functions that augment base R functionality.
+
+You can instal and load the complete tidyverse with:
+
+
+```r
+install.packages("tidyverse")
+```
+
+
+```r
+library(tidyverse)
+```
+
+---
+
+class: inverse, center, middle
+
+# Demo doc (part 0): Try it out!
+
+*You can find the demo doc in RStudio or in your downloaded repository files. It is titled 'demo-doc.Rmd'*
+
+*The doc is also [in the repository](https://github.com/bretsw/fsu-workshop/blob/master/demo-doc.Rmd).*
+
+---
+
+# Looking at Demo Doc
+
+&lt;img src="img/RStudio.png" width="720px" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+
+# Demo doc (part 1): Try it out!
+
+*You can find the demo doc in RStudio or in your downloaded repository files. It is titled 'demo-doc.Rmd'*
+
+*The doc is also [in the repository](https://github.com/bretsw/fsu-workshop/blob/master/demo-doc.Rmd).*
+
+---
+
+
+class: inverse, center, middle
+
+# Processing Data
+
+---
+
+# The pipe: %&gt;% 
+
+First, let's load the data we downloaded in the last step.
+
+
+```r
+student_responses &lt;- readr::read_csv("student-responses-data.csv")
+```
+
+We're also going to introduce a powerful, unusual *operator* in R, the pipe. The pipe is this symbol: `%&gt;%`. It lets you *compose* functions. It does this by passing the output of one function to the next.
+
+The `select()` function from **dply** that reduces the number of *columns* of a dataset.
+
+
+```r
+student_mot_vars &lt;- # save object student_mot_vars by...
+  student_responses %&gt;% # using dataframe student_responses
+  select(SCIEEFF, JOYSCIE, INTBRSCI, EPIST, INSTSCIE) # and selecting only these five variables
+
+student_mot_vars
+```
+
+Also, check out the helper functions: `contains()`, `starts_with()`, and `ends_with()`, i.e.:
+
+
+```r
+student_responses %&gt;% 
+  select(contains("sci"))
+```
+
+---
+
+# Saving the results
+
+Note that we saved the output from the `select()` function to `student_mot_vars` but we could also save it back to `student_responses`, which would simply overwrite the original data frame (the following code is not run here):
+
+
+```r
+student_responses &lt;- # save object student_responses by...
+  student_responses %&gt;% # using dataframe student_responses
+  select(student_responses, SCIEEFF, JOYSCIE, INTBRSCI, EPIST, INSTSCIE) # and selecting only these five variables
+```
+
+---
+
+# Renaming
+
+We can also rename the variables at the same time we `select()` them. Let's save the results to `student_mot_vars`.
+
+
+```r
+student_mot_vars &lt;- student_responses %&gt;% 
+  select(student_efficacy = SCIEEFF,
+         student_joy = JOYSCIE, 
+         student_broad_interest = INTBRSCI,
+         student_epistemic_beliefs = EPIST,
+         student_instrumental_motivation = INSTSCIE
+  )
+
+student_mot_vars %&gt;% 
+  head(3) # displays first 3 rows of the dataframe
+```
+
+```
+## # A tibble: 3 x 5
+##   student_efficacy student_joy student_broad_i… student_epistem…
+##              &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+## 1            3.28       2.16              1.73             2.16 
+## 2           -0.668      0.509             0.491           -0.501
+## 3           -1.62       0.0992           -0.638           -0.193
+## # … with 1 more variable: student_instrumental_motivation &lt;dbl&gt;
+```
+
+---
+
+# Creating a new variable
+
+`mutate()` takes instructions to create a new variable.
+
+What goes *before* the equals sign is the name of the new variable.
+
+What goes after are the instructions.
+
+
+```r
+student_responses %&gt;% 
+  select(student_efficacy = SCIEEFF, 
+         student_joy = JOYSCIE, 
+         student_broad_interest = INTBRSCI, 
+         student_epistemic_beliefs = EPIST,
+         student_instrumental_motivation = INSTSCIE) %&gt;% 
+  mutate(student_joy_interest = (student_joy + student_broad_interest) / 2) %&gt;% 
+  head(3)
+```
+
+```
+## # A tibble: 3 x 6
+##   student_efficacy student_joy student_broad_i… student_epistem…
+##              &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+## 1            3.28       2.16              1.73             2.16 
+## 2           -0.668      0.509             0.491           -0.501
+## 3           -1.62       0.0992           -0.638           -0.193
+## # … with 2 more variables: student_instrumental_motivation &lt;dbl&gt;,
+## #   student_joy_interest &lt;dbl&gt;
+```
+
+---
+
+# Filtering the data set
+
+`filter()` uses *logical statements* (statements that can evalute to true or false) to select a number of *rows* from a dataset.
+
+
+```r
+student_responses %&gt;% 
+  select(student_efficacy = SCIEEFF, 
+         student_joy = JOYSCIE, 
+         student_broad_interest = INTBRSCI, 
+         student_epistemic_beliefs = EPIST,
+         student_instrumental_motivation = INSTSCIE) %&gt;% 
+  mutate(student_joy_interest = (student_joy + student_broad_interest) / 2) %&gt;% 
+  filter(student_joy_interest &gt; mean(student_joy_interest, na.rm = TRUE)) %&gt;% 
+  head(3)
+```
+
+```
+## # A tibble: 3 x 6
+##   student_efficacy student_joy student_broad_i… student_epistem…
+##              &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
+## 1           3.28         2.16             1.73             2.16 
+## 2          -0.668        0.509            0.491           -0.501
+## 3          -0.0378       1.67             0.332            2.16 
+## # … with 2 more variables: student_instrumental_motivation &lt;dbl&gt;,
+## #   student_joy_interest &lt;dbl&gt;
+```
+
+---
+
+# Grouping and summarizing
+
+It is often useful to aggregate a data set.
+
+The `group_by()` and `summarize()` functions are especially helpful for this purpose.
+
+Let's find the mean, standard deviation, and counts of student broad interest by teacher.
+
+
+```r
+student_responses %&gt;% 
+  select(student_broad_interest = INTBRSCI, teacher_id = SCHID) %&gt;% 
+  group_by(teacher_id) %&gt;% 
+  summarize(student_broad_interest_mean = mean(student_broad_interest, na.rm = TRUE),
+            student_broad_interest_sd = sd(student_broad_interest, na.rm = TRUE),
+            n = n()) %&gt;% 
+  head(3)
+```
+
+```
+## # A tibble: 3 x 4
+##   teacher_id student_broad_interest_mean student_broad_interest_sd     n
+##   &lt;chr&gt;                            &lt;dbl&gt;                     &lt;dbl&gt; &lt;int&gt;
+## 1 00001                          -0.157                      0.846    36
+## 2 00003                          -0.136                      1.08     31
+## 3 00004                          -0.0430                     1.26     39
+```
+
+---
+
+# Arranging
+
+Finally, let's arrange the table by the number of students in each class.
+
+`arrange()` sorts in order from the smallest to largest values.
+
+`desc()` tells `arrange()` to sort in descending order.
+
+
+```r
+student_responses %&gt;% 
+  select(student_broad_interest = INTBRSCI, teacher_id = SCHID) %&gt;% 
+  group_by(teacher_id) %&gt;% 
+  summarize(student_broad_interest_mean = mean(student_broad_interest, na.rm = TRUE),
+            student_broad_interest_sd = sd(student_broad_interest, na.rm = TRUE),
+            n = n()) %&gt;% 
+  arrange(desc(n)) %&gt;% 
+  head(3)
+```
+
+```
+## # A tibble: 3 x 4
+##   teacher_id student_broad_interest_mean student_broad_interest_sd     n
+##   &lt;chr&gt;                            &lt;dbl&gt;                     &lt;dbl&gt; &lt;int&gt;
+## 1 00107                           0.204                      0.786    42
+## 2 00117                           0.204                      0.893    42
+## 3 00131                           0.0349                     0.870    41
+```
+
+---
+
+# Counting
+
+Sometimes, we simply want to count the number of observations associated with each group.
+
+
+```r
+student_responses %&gt;% 
+  select(teacher_id = SCHID) %&gt;% 
+  count(teacher_id)
+```
+
+We could then use this `count()` as the basis of *other* summary statistics.
+
+
+```r
+student_responses %&gt;% 
+  select(teacher_id = SCHID) %&gt;% 
+  count(teacher_id) %&gt;% 
+  summarize(n_mean = mean(n),
+            n_sd = sd(n))
+```
+
+```
+## # A tibble: 1 x 2
+##   n_mean  n_sd
+##    &lt;dbl&gt; &lt;dbl&gt;
+## 1   32.3  8.61
+```
+
+On average, there are approximately 32 (*SD* = 8.61) students in each teachers' class.
+
+
+---
+
+class: inverse, center, middle
+
+# Loading data
+
+---
+
+# Loading a CSV File
+
+Okay, we're ready to go. The easiest way to read a CSV file is with the function `read_csv()` from the package **readr**, which is contained within the tidyverse.
+
+Again, we'll load (or have loaded, already) the tidyverse library.
+
+
+```r
+library(tidyverse) # so tidyverse packages can be used for analysis
+```
+
+Just as a recap of a line that we ran earlier. 
+
+
+```r
+student_responses &lt;- readr::read_csv("student-responses-data.csv")
+```
+
+Since we loaded the data, we now want to look at it. We can type its name in the function `glimpse()` to print some information on the dataset (this code is not run here).
+
+
+```r
+glimpse(student_responses)
+```
+
+You can also print the name of the object. 
+
+---
+
+# Loading Excel and SAV files
+
+## Loading Excel files
+
+
+```r
+install.packages("readxl")
+```
+
+
+```r
+library(readxl)
+```
+
+
+```r
+my_data &lt;-
+  read_excel("path/to/file.xlsx")
+```
+
+## Loading SAV files
+
+
+```r
+install.packages("haven")
+```
+
+
+```r
+library(haven)
+my_data &lt;-
+  read_sav("path/to/file.sav")
+```
+
+---
+
+# Saving (Writing) Files
+
+Using our data frame `student_responses`, we can save it as a CSV (for example) with another function from **readr**, `write_csv()`. The first argument, `student_reponses`, is the name of the object that you want to save. The second argument, `student-responses.csv`, what you want to call the saved dataset.
+
+
+```r
+write_csv(student_responses, "student-responses-data.csv")
+```
+
+This will save a CSV file titled `student-responses-data.csv` in the working directory. If you want to save it to another directory, simply add the file path to the file, i.e. `path/to/student-responses-data.csv`. To save a file for SPSS, load the **haven** package and use `write_sav()`. There is not a function to save an Excel file, but a file saved as a CSV can be directly loaded into Excel.
+
+---
+
+class: inverse, center, middle
+
+# Demo doc (part 2): Try it out!
+
+*You can find the demo doc in RStudio or in your downloaded repository files. It is titled 'demo-doc.Rmd'*
+
+*The doc is also [in the repository](https://github.com/bretsw/fsu-workshop/blob/master/demo-doc.Rmd).*
+
+---
+
+class: inverse, center, middle
+
+# Visualizing data
+
+---
+
+# The grammar of graphics
+
+**ggplot2** is a tidyverse package for creating visualizations (or figures).
+
+Let's work with a smaller data set, for now.
+
+
+```r
+student_mot_vars &lt;- # save object student_mot_vars by...
+  student_responses %&gt;% # using dataframe student_responses
+  select(student_efficacy = SCIEEFF, # selecting variable SCIEEFF and renaming to student_efficiency
+         student_joy = JOYSCIE, # selecting variable JOYSCIE and renaming to student_joy
+         student_broad_interest = INTBRSCI, # selecting variable INTBRSCI and renaming to student_broad_interest
+         student_epistemic_beliefs = EPIST, # selecting variable EPIST and renaming to student_epistemic_beliefs
+         student_instrumental_motivation = INSTSCIE,  # selecting variable INSTSCIE and renaming to student_instrumental_motivation
+         teacher_id = SCHID
+  )
+```
+
+---
+
+# Scatter plot
+
+Notice that there are three parts to all **ggplot2** graphs: a) the data (`student_mot_vars`), b) an `aes()` (aesthetic mapping), and c) a `geom`:
+
+
+```r
+ggplot(data = student_mot_vars,
+       aes(x = student_efficacy, y = student_broad_interest)) + # sets up the plot
+  geom_point() # adds points to the plot
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-32-1.png" width="320px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Scatter plot with a regression line
+
+
+```r
+ggplot(student_mot_vars,
+       aes(x = student_efficacy, y = student_broad_interest)) +
+  geom_point() +
+  geom_smooth(method = "lm") # notice how you keep adding new geom_ layers
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-33-1.png" width="320px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Cleaning up
+
+
+```r
+ggplot(student_mot_vars,
+       aes(x = student_efficacy, y = student_broad_interest)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_bw() +
+  xlab("Student Efficacy") +
+  ylab("Student Broad Interest")
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-34-1.png" width="320px" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+
+# Demo doc (part 3): Try it out!
+
+*You can find the demo doc in RStudio or in your downloaded repository files. It is titled 'demo-doc.Rmd'*
+
+*The doc is also [in the repository](https://github.com/bretsw/fsu-workshop/blob/master/demo-doc.Rmd).*
+
+---
+
+class: inverse, center, middle
+
+# Modeling data
+
+---
+
+# Linear models
+
+The `lm()` function (part of the **stats** package that comes with R) is a very helpful general purpose function for linear models. We'll use the `student_mot_vars` data frame we created earlier.
+
+
+```r
+lm(student_epistemic_beliefs ~ student_broad_interest, data = student_mot_vars)
+```
+
+```
+## 
+## Call:
+## lm(formula = student_epistemic_beliefs ~ student_broad_interest, 
+##     data = student_mot_vars)
+## 
+## Coefficients:
+##            (Intercept)  student_broad_interest  
+##                 0.2407                  0.2401
+```
+
+--
+
+Let's save the results back to an object, `m1`.
+
+
+```r
+m1 &lt;- lm(student_epistemic_beliefs ~ student_broad_interest, data = student_mot_vars)
+```
+
+---
+
+# Linear models
+
+We can then run `summary()` on the output:
+
+
+```r
+summary(m1)
+```
+
+```
+## 
+## Call:
+## lm(formula = student_epistemic_beliefs ~ student_broad_interest, 
+##     data = student_mot_vars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.6197 -0.5614 -0.1755  0.5917  2.5144 
+## 
+## Coefficients:
+##                        Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)             0.24066    0.01390   17.31   &lt;2e-16 ***
+## student_broad_interest  0.24015    0.01423   16.88   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 1.013 on 5323 degrees of freedom
+##   (387 observations deleted due to missingness)
+## Multiple R-squared:  0.0508,	Adjusted R-squared:  0.05062 
+## F-statistic: 284.9 on 1 and 5323 DF,  p-value: &lt; 2.2e-16
+```
+
+---
+
+# Linear models
+
+You can also build more complex models, such as:
+
+
+```r
+m2 &lt;- lm(student_epistemic_beliefs ~ student_broad_interest + 
+                                      student_joy + 
+                                      student_broad_interest:student_joy, 
+         data = student_mot_vars)
+```
+
+--
+
+You can then run `summary()` to view the results.
+
+---
+
+# Multi-level models
+
+To add even more complexity, you can use the `lmer()` function from the **lme4** package:
+
+
+```r
+install.packages(lme4)
+library(lme4)
+```
+
+
+```r
+m2_mlm &lt;- lme4::lmer(student_epistemic_beliefs ~ student_broad_interest + 
+                                            student_joy + 
+                                            student_broad_interest:student_joy + 
+                                            (1 | teacher_id), 
+               data = student_mot_vars)
+m2_mlm
+```
+
+```
+## Linear mixed model fit by REML ['lmerMod']
+## Formula: student_epistemic_beliefs ~ student_broad_interest + student_joy +  
+##     student_broad_interest:student_joy + (1 | teacher_id)
+##    Data: student_mot_vars
+## REML criterion at convergence: 14853.02
+## Random effects:
+##  Groups     Name        Std.Dev.
+##  teacher_id (Intercept) 0.1839  
+##  Residual               0.9648  
+## Number of obs: 5315, groups:  teacher_id, 176
+## Fixed Effects:
+##                        (Intercept)              student_broad_interest  
+##                            0.16608                             0.07491  
+##                        student_joy  student_broad_interest:student_joy  
+##                            0.27409                             0.01991
+```
+
+---
+
+class: inverse, center, middle
+
+# Considerations for Using Social Media Data in Learning Design &amp; Technology Research
+
+&lt;img src="img/book.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Chapter overview
+
+Our purpose in this chapter is to suggest considerations that LDT professionals should make as they use social media data in their research. 
+
+--
+
+## Sections
+
+1. Conducting ethical research
+1. Framing the research
+1. Organizing the research process
+1. Collecting data
+1. Analyzing data
+1. Disseminating research
+1. Learning and doing more with R
+
+---
+
+# Important notes
+
+--
+
+* Our purpose is *not* to dismiss traditional research methods
+
+--
+
+* There is considerable room for debate and disagreement around the proper way to conduct social media research
+
+--
+
+* Our focus is not providing answers but raising questions
+
+--
+
+* The issues and processes we raise are not linear; this is not a simple recipe to follow
+
+--
+
+* We avoid the traditional distinction between *quantitative* and *qualitative* research, and instead suggest various other distinctions as we go
+
+---
+
+class: inverse, center, middle
+
+# What's your project?
+
+&lt;img src="img/project-legos.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+
+# Conducting ethical research
+
+---
+
+# Conducting ethical research
+
+* Often, IRBs do not flag social media work as human subjects research; however, we would suggest that it is a human phenomenon
+
+--
+
+* Not a checklist, but a thorough consideration of research context and ethical principles is needed
+
+--
+
+* Public vs. private
+
+--
+
+* Harms and benefits
+
+--
+
+* Vulnerability
+
+--
+
+* Anonymity
+
+--
+
+* Consent
+
+--
+
+* Legal considerations
+
+---
+
+class: inverse, center, middle
+
+# What ethical considerations should you examine in your project?
+
+&lt;img src="img/project-legos.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+
+# Framing the research
+
+---
+
+# Framing the research
+
+--
+
+* Paradigms and assumptions
+
+--
+
+* Research design, methods, and modes of inquiry
+
+--
+
+* Conceptual frameworks
+
+--
+
+  * Community, network, or space?
+
+--
+
+* Phenomena and units of analysis
+
+---
+
+class: inverse, center, middle
+
+# How will you frame your project?
+
+&lt;img src="img/project-legos.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+
+# Organizing the research process
+
+---
+
+# Organizing the research process
+
+--
+
+* Software
+
+--
+
+* Storing data
+
+--
+
+* Workflows
+
+--
+
+* Documentation
+
+---
+
+class: inverse, center, middle
+
+# What do you need to do to organize your project?
+
+&lt;img src="img/project-legos.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+
+# Collecting data
+
+---
+
+# Collecting data
+
+--
+
+We need to move beyond *qualitative* vs. *quantitative*. Instead, think about:
+
+--
+
+* **Quantity:** big vs. small
+
+--
+
+* **Interaction with participants:** Obtrusive or unobtrusive
+
+--
+
+  * Unobtrusive: *digital traces*
+
+--
+
+* **Process**
+
+--
+
+  * Application programming interfaces (APIs)
+  * TAGS + rtweet = **library(tidytags)**
+  * Web scraping
+  * Accessing archives
+
+---
+
+class: inverse, center, middle
+
+# How will you collect data for your project?
+
+&lt;img src="img/project-legos.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+
+# Analyzing data
+
+---
+
+# Analyzing data
+
+--
+
+* Spam (including participation inequality)
+
+--
+
+* Machine vs. human analysis
+
+--
+
+* Networks
+
+---
+
+class: inverse, center, middle
+
+# How will you analyze data for your project?
+
+&lt;img src="img/project-legos.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+
+# Disseminating research
+
+---
+
+# Disseminating research
+
+--
+
+* Sharing data
+
+--
+
+* Sharing code
+
+--
+
+  * TAGS + rtweet = [library(tidytags) is available here](https://github.com/bretsw/tidytags)
+
+--
+
+  * Github (http://github.com)
+
+--
+
+  * Open Science Framework (http://osf.io)
+
+--
+
+* Publishing and publicizing research
+
+--
+
+  * Journals, conferences, social media
+
+---
+
+class: inverse, center, middle
+
+# How will you disseminate your project?
+
+&lt;img src="img/project-legos.jpg" width="600px" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, center, middle
+
+# Conclusion
+
+---
+
+# Conclusion
+
+&lt;img src="img/book.jpg" width="320px" style="display: block; margin: auto;" /&gt;
+
+--
+
+* The ready availability of social media data provides many opportunities...
+
+--
+
+* ...but also considerable challenges for LDT researchers.
+
+--
+
+* So, get familiar with the broad considerations,
+
+--
+
+* and don't skip asking the important questions.
+
+--
+
+* Start and end with research ethics, and revisit throughout.
+
+---
+
+class: inverse, center, middle
+
+# Self-guided exploration 
+
+---
+
+# How We Teach
+
+&lt;img src="img/tech_support_cheat_sheet.png" width="480px" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Introduction to text analysis
+
+--
+
+There are all kinds of things you might wonder about the text of a document. 
+
+For instance:
+
+--
+
+* How many words are in a document?
+
+--
+
+* Which words are most used most often in a text?
+
+--
+
+* How many times is a specific word used?
+
+---
+
+# Introduction to social network analysis
+
+--
+
+&lt;img src="img/csed-graph-forced-atlas8.png" width="480px" style="display: block; margin: auto;" /&gt;
+
+*A network is a set of objects, and network analysis is interested in the relationships between them.*
+
+---
+
+# Introduction to social network analysis
+
+&lt;img src="img/csed-graph-forced-atlas8.png" width="480px" style="display: block; margin: auto;" /&gt;
+
+*So, what are the objects? How are they related?*
+
+---
+
+# Self-guided exploration 
+
+--
+
+### Option A: Text analysis (Difficulty: Moderate)
+
+*The doc is [here](https://github.com/bretsw/fsu-workshop/blob/master/explore-on-your-own-A.Rmd) in the repository*
+
+*You can also find it in the repositiory:* `explore-on-your-own-A.Rmd` file
+
+--
+
+### Option B: Social network analysis (Difficulty: Hard)
+
+*The doc is [here](https://github.com/bretsw/fsu-workshop/blob/master/explore-on-your-own-B.Rmd) in the repository*
+
+*You can also find it in the repositiory:* `explore-on-your-own-B.Rmd` file
+
+---
+
+class: inverse, center, middle
+
+# Learning and doing more with R
+
+---
+
+# Resources
+
+* [Data science in education using R](https://datascienceineducation.com/) by Bovee, Estrellado, Mostipak, Rosenberg, and Velásquez (2020)
+* [R for data science](https://r4ds.had.co.nz/) by Grolemund and Wickham (2017)
+* [Big magic with R: Creating learning beyond
+    fear](https://speakerdeck.com/apreshill/big-magic-with-r-creative-learning-beyond-fear) by Hill (2018)
+* [RStudio Community](https://community.rstudio.com/)
+* [\#r4ds](https://medium.com/@kierisi/r4ds-the-next-iteration-d51e0a1b0b82) - see a talk at rstudio::conf() [here](https://resources.rstudio.com/rstudio-conf-2019/r4ds-online-learning-community-improvements-to-self-taught-data-science-and-the-critical-need-for-diversity-equity-and-inclusion-in-data-science-education) by Mostipak (2019)
+* [Data science for social scientists](http://datascience.tntlab.org/) by
+    Landers (2019)
+
+---
+
+# Useful packages
+
+Install via `install.packages(&lt;name-of-package)`, i.e., `install.packages("tidylog")`.
+
+* tidyverse: tools for data manipulation and processing
+* tidylog: companion to the tidyverse; gives you feedback
+* haven: import and export files for other statistical software
+* apaTables: create APA-style tables in MS Word format
+* devtools: to download packages only available on GitHub
+* psych: general psychological science-related analysis tools
+* skimr: quickly calculate summary statistics for a data frame
+
+---
+
+# Useful packages
+
+With a few exceptions, can install via `install.packages(&lt;name-of-package)`, i.e., `install.packages("tidylog")`.
+
+* lme4: multi-level modeling (HLM)
+* tipyLPA: latent profile analysis
+* sjstats: convenient statistical functions
+* rmarkdown: reports (PDF, Word, HTML, etc.)
+* blogdown: create a website/blog
+* xaringan: create presentations
+* papaja: APA-style paper generation (must install from [GitHub](https://github.com/crsh/papaja))
+* tidytags: Easy collection and powerful analysis of Twitter data (must install from [GitHub](https://github.com/bretsw/tidytags))
+
+---
+
+# People (and a few hashtags) to follow (on Twitter)
+
+* [Jesse Mostipak](https://twitter.com/kierisi)
+* [Alison Hill](https://twitter.com/apreshill)
+* [Hadley Wickham](https://twitter.com/hadleywickham)
+* [Daniel Anderson](https://twitter.com/datalorax_)
+* [Mara Averick](https://twitter.com/dataandme)
+* [Thomas Mock](https://twitter.com/thomas_mock)
+* [Angela Li](https://twitter.com/CivicAngela)
+* [R4DS community](https://twitter.com/R4DScommunity)
+* [#tidytuesday](https://twitter.com/hashtag/TidyTuesday?src=hash)
+* [#rstats](https://twitter.com/hashtag/rstats?src=hash)
+* [David Robinson](https://twitter.com/drob)
+* [Julia Silge](https://twitter.com/juliasilge)
+* [Gabriela de Quieroz](https://twitter.com/gdequeiroz)
+* [Emily Bovee](https://twitter.com/ebovee09)
+* [Joshua Rosenberg](https://twitter.com/jrosenberg6432)
+* [Spencer Greenhalgh](https://twitter.com/spgreenhalgh)
+* [Bret Staudt Willet](https://twitter.com/bretsw)
+
+---
+
+# Acknowledgments
+
+Much of the content of this workshop follows a [workshop we facilitated at the AECT 2019 annual convention](https://github.com/bretsw/aect19-workshop).
+
+Thank you to [Emily Bovee](https://github.com/emilybovee) for co-developing the workshops this workshop is adapted from: https://github.com/jrosen48/MTSU-workshop and https://github.com/jrosen48/MSU-workshop-2019
+
+Parts of the content for this workshop are also adapted from:
+
+* The [*Data Science in Education Using R* book](https://github.com/data-edu/data-science-in-education) by Emily A. Bovee, Ryan A. Estrellado, Jesse Mostipak, Joshua M. Rosenberg, and Isabella C. Velásquez to be published by Routledge in 2020 
+* An American Educational Research Association 2019 annual meeting [workshop on *Reproducible and transparent research with R*](https://github.com/ResearchTransparency/rr_aera19) by [Daniel Anderson](https://github.com/datalorax]) and [Joshua Rosenberg](https://github.com/jrosen48/)
+
+Finally, parts of the content for this workshop are inspired from content associated with the [Data Science Specialization for UO COE](https://github.com/uo-datasci-specialization) (led by [Daniel Anderson](https://github.com/datalorax])).
+
+---
+
+class: inverse, center, middle
+
+# Questions?
+
+Bret Staudt Willet: [staudtwi@msu.edu](mailto:staudtwi@msu.edu)  
+Joshua Rosenberg: [jmrosenberg@utk.edu](mailto:jmrosenberg@utk.edu)  
+Spencer Greenhalgh: [spencer.greenhalgh@uky.edu](mailto:spencer.greenhalgh@uky.edu)  
+
+The GitHub repository for this workshop is:  
+https://github.com/bretsw/fsu-workshop
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

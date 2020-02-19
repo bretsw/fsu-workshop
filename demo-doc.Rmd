@@ -1,0 +1,208 @@
+---
+title: "Workshop Demo Doc"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Demo doc (part 0): Try it out!
+
+Let's get set up by loading the **tidyverse** suite of packages.
+
+If you haven't already, make sure to install the tidyverse, first.
+
+*You can skip this code "chunk" if you already have the tidyverse installed; you only need to do this once*
+
+```{r}
+install.packages("tidyverse")
+```
+
+Be sure to run this next line to load the tidyverse. You do this each time you open R.
+
+```{r}
+library(tidyverse)
+```
+
+Here is the data set we will use, a sample of categorical variables from the General Social survey included with the tidyverse:
+
+```{r}
+gss_cat
+```
+
+--------------------------------------------------------------------------------
+
+# Demo doc (part 1): Try it out!
+
+# select()
+
+Let's select only a few variables.
+
+```{r}
+gss_cat %>% 
+  select(year, tvhours)
+
+gss_cat %>% 
+  select(year, marital, tvhours)
+```
+
+**Try it out!**
+
+Now, select three *different* variables, and run the code chunk to view the result.
+
+```{r}
+gss_cat %>% 
+  select()
+```
+
+# filter()
+
+```{r}
+gss_cat %>% 
+  filter(age > 60)
+```
+
+**Try it out!**
+
+Filter to include only those individuals who watch a lot of TV - more than 10 hours per *day*!
+
+Be sure to run the result to see whether it did what you think it should do!
+
+```{r}
+gss_cat %>% 
+  
+```
+
+# mutate()
+
+Let's create a new variable for those 60 years of age or older.
+
+```{r}
+gss_cat %>% 
+  mutate(potential_senior = if_else(age >= 63.5, 1, 0),
+         super_senior = if_else(potential_senior == 1 & tvhours < 2, 1, 0)) %>% 
+  count(potential_senior, super_senior)
+```
+
+Let's save the results back to `gss_cat` and make sure that it worked.
+
+```{r}
+gss_cat <- gss_cat %>% 
+  mutate(potential_senior = ifelse(age >= 63.5, TRUE, FALSE))
+```
+
+Adding another variable for folks who are middle-aged.
+
+```{r}
+gss_cat <- gss_cat %>% 
+  mutate(middle_aged = ifelse(age >= 30 & age <= 40, "yes", "no"))
+```
+
+**Try it out!**
+
+Can you create a new variable based upon either the *year* or *tvhours* variable using `if_else()`? 
+
+```{r}
+gss_cat %>% 
+  mutate()
+```
+
+Then, save the results back to `gss_cat` (check out the code two chunks above for an example!).
+
+```{r}
+gss_cat %>% 
+  mutate()
+```
+
+# End of part 1!
+
+--------------------------------------------------------------------------------
+
+# Demo doc (part 2): Try it out!
+
+`geom_jitter()` is exactly like geom_point, but with a small amount of x- and y-axis random noise added.
+
+```{r}
+ggplot(gss_cat, aes(x = age, y = tvhours)) +
+  geom_jitter()
+```
+
+**Try it out!**
+
+Can you add a line representing the linear relationship between the two varibles? Add another layer using a `geom_` function.
+
+
+```{r}
+# hint: check out how a line was added in the presentation
+
+ggplot(gss_cat, aes(x = age, y = tvhours)) +
+  geom_jitter() +
+  geom_
+```
+
+Let's try a different theme.
+
+```{r}
+ggplot(gss_cat, aes(x = age, y = tvhours)) +
+  geom_jitter() +
+  theme_bw()
+```
+
+**Try it out!**
+
+Can you add a different theme? Start typing `theme_` and see what shows up! Be sure to run the code to see the results!
+
+```{r}
+ggplot(gss_cat, aes(x = age, y = tvhours)) +
+  geom_jitter() +
+  theme_
+```
+
+Does the relationship appear to be different by year?
+
+```{r}
+ggplot(gss_cat, aes(x = age, y = tvhours)) +
+  geom_jitter() +
+  facet_wrap(~year)
+```
+
+**Try it out!**
+
+Can you add lines of best fit to the above plots?
+
+```{r}
+ggplot(gss_cat, aes(x = age, y = tvhours)) +
+  geom_jitter() +
+  geom_
+  facet_wrap(~year)
+```
+
+# End of part 2!
+
+--------------------------------------------------------------------------------
+
+# Demo doc (part 3): Try it out!
+
+Let's run a linear regression using `lm()`:
+
+```{r}
+m1 <- lm(tvhours ~ age, data = gss_cat)
+summary(m1)
+```
+
+Character strings and factors are automatically dummy-coded by `lm()`:
+
+```{r}
+m2 <- lm(tvhours ~ marital, data = gss_cat)
+summary(m2)
+```
+
+**Try it out!**
+
+Can you add another variable to the model? If you need to check what variables are in `gss_cat`, print that object to the console. What do you notice about the output?
+
+```{r}
+m3 <- lm(tvhours ~ age + , data = gss_cat)
+summary(m3)
+```
