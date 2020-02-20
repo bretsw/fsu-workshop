@@ -97,7 +97,9 @@ class: inverse, center, middle
 
 # Download the repository
 
-You can access all of the workshop materials at: https://github.com/bretsw/fsu-workshop/
+You can access all of the workshop materials at by visiting the [FSU Workshop Github repo](https://github.com/bretsw/fsu-workshop/).
+
+Click on the big greeen **Clone or download** button to download the entire repo into a folder on your computer.
 
 ```{r, out.width = "720px", echo = FALSE, fig.align = "center"}
 knitr::include_graphics("img/download_repo_screenshot.png")
