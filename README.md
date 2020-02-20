@@ -8,6 +8,8 @@ Friday, 03/06/2020, 1-5pm
 * [Joshua Rosenberg](https://github.com/jrosen48/)
 * [Spencer Greenhalgh](https://github.com/greenhas)
 
+---
+
 ## Description
 
 In this workshop, we help members of the [Students, Social Media & Schools](https://studentssocialmediaschools.com/) research group at Florida State University learn how to use the R statistical software to analyze Internet data that is relevant to educational research. In particular, we focus on learning how to get started with R, how to analyze social media data, and how to begin one’s own analysis. This workshop promises to support participants to become more confident in their ability to engage in analyzing complex data sources collected from digital sources. 
@@ -52,9 +54,23 @@ If you have issues with any of the installations below (and don’t worry, they�
 - Find your operating system (Mac, Windows, or Linux)
 - Download the 'latest release' on the page for your operating system and download and install the application
 
+---
+
+## RStudio Cloud: An alternative to installing R and RStudio
+
+If you are having trouble downloading R or RStudion, don't worry, you're not alone. In fact, in the workshops we've run, we have seen enough new R users struggle just to get going that we now suggest using RStudio Cloud as an alternative. 
+
+**[This link will take you to the RStudio Cloud project for this workshop](https://rstudio.cloud/project/964811).**
+
+Once you have navigated to this webpage, log in using a Google or Github account. Then, create a permanent copy of the project in your own workspace (see the prompt at the top of the page guiding you to do this.
+
+From here, you can write and run R code exactly as your would through RStudio on your computer. The downside is that opening and loading projects are slowed by Internet connection speeds. The upside is that you don't have to worry about R and RStudio downloads, and your computing power is running off of RStudio Cloud's servers, not your local machine. Once you start running advanced statistical models, computing power bgins to make a huge difference.
+
+---
+
 ## Slides
 
-The slide deck for the workshop is here: https://bretsw.github.io/fsu-workshop/
+[This link will take you to the slide deck for the workshop](https://bretsw.github.io/fsu-workshop/).
 
 ## Interactive R Markdown File
 
