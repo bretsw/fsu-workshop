@@ -16,11 +16,6 @@ output:
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 
-# see options for customize slides: 
-# https://slides.yihui.name/xaringan/
-# https://slides.yihui.name/xaringan/incremental.html
-# https://github.com/yihui/xaringan/wiki
-
 library(knitr)
 library(tidyverse)
 library(xaringan)
@@ -113,14 +108,14 @@ knitr::include_graphics("img/download_repo_screenshot.png")
 # Installing R and RStudio
 
 To download R:
-- Visit this page to download R: https://cran.r-project.org/
-- Find your operating system (Mac, Windows, or Linux)
-- Download the 'latest release' on the page for your operating system and download and install the application
+* [Visit this page to download R](https://cran.r-project.org/)
+* Find your operating system (Mac, Windows, or Linux)
+* Download the 'latest release' on the page for your operating system and download and install the application
 
 To download RStudio:
-- Visit this page to download RStudio: https://www.rstudio.com/products/rstudio/download/
-- Find your operating system (Mac, Windows, or Linux)
-- Download the 'latest release' on the page for your operating system and download and install the application
+* [Visit this page to download RStudio](https://rstudio.com/products/rstudio/download/)
+* Find your operating system (Mac, Windows, or Linux)
+* Download the 'latest release' on the page for your operating system and download and install the application
 
 ## Check that it worked
 
@@ -128,11 +123,23 @@ Open RStudio. Find the console window and type in `2 + 2`. If what you can guess
 
 ---
 
+# RStudio Cloud: An alternative to installing R and RStudio
+
+If you are having trouble downloading R or RStudion, don't worry, you're not alone. In fact, in the workshops we've run, we have seen enough new R users struggle just to get going that we now suggest using RStudio Cloud as an alternative. 
+
+**[This link will take you to the RStudio Cloud project for this workshop].**
+
+Once you have navigated to this webpage, log in using a Google or Github account. Then, create a permanent copy of the project in your own workspace (see the prompt at the top of the page guiding you to do this.
+
+From here, you can write and run R code exactly as your would through RStudio on your computer. The downside is that opening and loading projects are slowed by Internet connection speeds. The upside is that you don't have to worry about R and RStudio downloads, and your computing power is running off of RStudio Cloud's servers, not your local machine. Once you start running advanced statistical models, computing power bgins to make a huge difference.
+
+---
+
 # Working with R projects
 
 Before proceeding, we're going to take a few steps to set ourselves to make the analysis easier; namely, through the use of Projects, an RStudio-specific organizational tool. 
 
-We already have a project set up. Navigate to the downloaded repo files and open `fsu-workshop-2019.Rproj`
+We already have a project set up. Navigate to the downloaded repo files and open `fsu-workshop-2019.Rproj`.
 
 (To create a project in RStudio, you can navigate to "File" and then "New Directory". Then, click "New Project".)
 
@@ -282,7 +289,7 @@ Note that we saved the output from the `select()` function to `student_mot_vars`
 ```{r, eval = FALSE}
 student_responses <- # save object student_responses by...
   student_responses %>% # using dataframe student_responses
-  select(student_responses, SCIEEFF, JOYSCIE, INTBRSCI, EPIST, INSTSCIE) # and selecting only these five variables
+  select(SCIEEFF, JOYSCIE, INTBRSCI, EPIST, INSTSCIE) # and selecting only these five variables
 ```
 
 ---
@@ -407,7 +414,6 @@ student_responses %>%
 ```
 
 On average, there are approximately 32 (*SD* = 8.61) students in each teachers' class.
-
 
 ---
 
@@ -550,7 +556,7 @@ ggplot(student_mot_vars,
 ```{r, warning = FALSE, out.width = "320px", echo = TRUE, fig.align = "center"}
 ggplot(student_mot_vars,
        aes(x = student_efficacy, y = student_broad_interest)) +
-  geom_point() +
+  geom_point(alpha = 0.2) + # 'alpha' controls the transparency of points
   geom_smooth(method = "lm") +
   theme_bw() +
   xlab("Student Efficacy") +
