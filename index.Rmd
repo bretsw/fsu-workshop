@@ -190,7 +190,7 @@ We only have to install a package once, but to use it, we have to load it each t
 
 In this case, [dplyr](https://www.rdocumentation.org/packages/dplyr/versions/0.7.8) is a package providing "a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges."
 
---- 
+---
 
 # Configuring RStudio
 
